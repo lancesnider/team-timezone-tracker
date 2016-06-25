@@ -1,0 +1,25 @@
+{
+  "name": "team-timezone-tracker",
+  "version": "1.0.0",
+  "description": "A simple list of coworkers, their locations, and current time.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lancesnider/team-timezone-tracker.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/lancesnider/team-timezone-tracker/issues"
+  },
+  "homepage": "https://github.com/lancesnider/team-timezone-tracker#readme",
+  "dependencies": {
+    "react": "^15.1.0",
+    "react-dom": "^15.1.0",
+    "webpack": "^1.13.1",
+    "webpack-dev-server": "^1.14.1"
+  }
+}
