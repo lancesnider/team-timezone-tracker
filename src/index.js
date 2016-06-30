@@ -10,7 +10,6 @@ var TimezoneTracker = React.createClass({
       <div>
         <TimezoneTitle />
         <TimezoneList data={this.state.data} />
-        <TimezoneAddTeamMember />
       </div>
     )
   }
@@ -43,9 +42,27 @@ var TimezoneList = React.createClass({
 })
 
 var TimezoneTeamMember = React.createClass({
+  getInitialState: function () {
+    var d = new Date();
+    return {date:d, dateFormat: ''}
+  },
+  getTimeFormat: function () {
+    var days = ["Sunday", "Monday", "Tuesday", "Wednsday", "Thursday", "Friday", "Saturday"];
+    var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+
+    var d = this.state.date;
+    var thisDay = days[d.getDay()];
+    var thisDate = d.getDate();
+    var thisMonth = months[d.getMonth()];
+    var dateFormat = this.props.name + " - " + this.props.location  + " - " + thisDay + " " + thisMonth + " " + thisDate + " - " + d.getHours() + ":" + d.getMinutes();
+
+    return dateFormat;
+  },
   render: function () {
     return (
-      <div>{this.props.name} - {this.props.location}</div>
+      <div>
+        {this.getTimeFormat()}
+      </div>
     )
   }
 })
@@ -74,4 +91,4 @@ var TimezoneAddTeamMember = React.createClass({
   }
 })
 
-ReactDOM.render(<TimezoneTracker pollInterval={2000} />, document.getElementById('app'));
+ReactDOM.render(<TimezoneTracker />, document.getElementById('app'));
