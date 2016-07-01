@@ -35,7 +35,7 @@ var TimezoneList = React.createClass({
     var timerInterval = setInterval(this.timer, 1000)
   },
   timer: function () {
-    d = new Date().toString()
+    d = new Date()
     this.setState({date: d})
   },
   render: function () {
@@ -58,9 +58,15 @@ var TimezoneList = React.createClass({
 })
 
 var TimezoneTeamMember = React.createClass({
+  formateDateTime: function () {
+    var date = this.props.date
+    // TO DO - get hours, minutes, days, to make it pretty (Mon, July 21st - 10:21am)
+    var formattedDateTime = date.toString()
+    return formattedDateTime
+  },
   render: function () {
     return (
-      <div>{this.props.name} - {this.props.location} - {this.props.date}</div>
+      <div>{this.props.name} - {this.props.location} - {this.formateDateTime()}</div>
     )
   }
 })
