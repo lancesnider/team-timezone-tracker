@@ -1,9 +1,9 @@
-var React = require('react');
-var ReactDOM = require('react-dom');
+var React = require('react')
+var ReactDOM = require('react-dom')
 
 var TimezoneTracker = React.createClass({
   getInitialState: function() {
-    return {data: [{id: 0, name: "Pat", location: "Ukraine"}, {id: 1, name: "Larry", location: "Cambodia"}]}
+    return {data: [{name: "Pat", location: "Ukraine"}, {name: "Larry", location: "Cambodia"}]}
   },
   render: function () {
     return (
@@ -25,13 +25,28 @@ var TimezoneTitle = React.createClass({
 })
 
 var TimezoneList = React.createClass({
+  getInitialState: function () {
+    return {date: ''}
+  },
+  componentWillMount: function () {
+    this.timer()
+  },
+  componentDidMount: function () {
+    var timerInterval = setInterval(this.timer, 1000)
+  },
+  timer: function () {
+    d = new Date().toString()
+    this.setState({date: d})
+  },
   render: function () {
-    var teammateNodes = this.props.data.map(function(teammate){
+    var currentDate = this.state.date
+    var teammateNodes = this.props.data.map(function(teammate, id){
       return (
         <TimezoneTeamMember
           name={teammate.name}
           location={teammate.location}
-          key={teammate.id}
+          date={currentDate}
+          key={id}
         >
         </TimezoneTeamMember>
       )
@@ -45,7 +60,7 @@ var TimezoneList = React.createClass({
 var TimezoneTeamMember = React.createClass({
   render: function () {
     return (
-      <div>{this.props.name} - {this.props.location}</div>
+      <div>{this.props.name} - {this.props.location} - {this.props.date}</div>
     )
   }
 })
@@ -55,10 +70,10 @@ var TimezoneAddTeamMember = React.createClass({
     return {name: '', location: ''}
   },
   handleNameChange: function (e) {
-    this.setState({name: e.target.value});
+    this.setState({name: e.target.value})
   },
   handleLocationChange: function (e) {
-    this.setState({location: e.target.value});
+    this.setState({location: e.target.value})
   },
   render: function () {
     return (
@@ -74,4 +89,4 @@ var TimezoneAddTeamMember = React.createClass({
   }
 })
 
-ReactDOM.render(<TimezoneTracker pollInterval={2000} />, document.getElementById('app'));
+ReactDOM.render(<TimezoneTracker pollInterval={2000} />, document.getElementById('app'))
