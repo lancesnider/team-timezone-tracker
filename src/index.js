@@ -3,7 +3,11 @@ var ReactDOM = require('react-dom')
 
 var TimezoneTracker = React.createClass({
   getInitialState: function() {
-    return {data: [{name: "Pat", location: "Ukraine", offset: -7}, {name: "Larry", location: "Cambodia", offset: 3}]}
+    return {data: [
+      {name: "Pat", location: "Ukraine", offset: 3}, 
+      {name: "Larry", location: "Cambodia", offset: 7},      
+      {name: "Haley", location: "Utah", offset: -7}
+    ]}
   },
   render: function () {
     return (
@@ -35,8 +39,10 @@ var TimezoneList = React.createClass({
     var timerInterval = setInterval(this.timer, 1000)
   },
   timer: function () {
-    d = new Date().getTime()
-    this.setState({date: d})
+    var d = new Date()
+    var localTimezoneOffset = d.getTimezoneOffset() * 60 * 1000
+    var adjustedDateTime = d.getTime() + localTimezoneOffset
+    this.setState({date: adjustedDateTime})
   },
   render: function () {
     var currentDate = this.state.date
@@ -60,14 +66,33 @@ var TimezoneList = React.createClass({
 
 var TimezoneTeamMember = React.createClass({
   formateDateTime: function () {
-    var adjustedDateTime = this.props.date + (this.props.offset * 1000 * 60 * 60)
+    var days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
+    var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
+
+    var localDate = this.props.date
+    var adjustedDateTime = localDate + (this.props.offset * 1000 * 60 * 60)
     var adjustedDate = new Date(adjustedDateTime)
-    var formattedDateTime = adjustedDate.toString()
+
+    var thisDay = days[adjustedDate.getDay()]
+    var thisDate = adjustedDate.getDate()
+    var thisMonth = months[adjustedDate.getMonth()]
+
+    var thisHour = adjustedDate.getHours()
+    var thisMinute = adjustedDate.getMinutes()
+    if(thisMinute<10)thisMinute = "0" + thisMinute
+    var thisSecond = adjustedDate.getSeconds()
+    if(thisSecond<10)thisSecond = "0" + thisSecond
+    var formattedTime = thisHour + ":" + thisMinute + ":" + thisSecond
+
+    var formattedDateTime = thisDay + ", " + thisMonth + " " + thisDate + " - " + formattedTime
     return formattedDateTime
   },
   render: function () {
     return (
-      <div>{this.props.name} - {this.props.location} - {this.formateDateTime()}</div>
+      <div>
+        <h4>{this.props.name} - {this.props.location}</h4>
+        <p>{this.formateDateTime()}</p>
+      </div>
     )
   }
 })
