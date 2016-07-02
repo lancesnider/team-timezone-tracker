@@ -3,7 +3,7 @@ var ReactDOM = require('react-dom')
 
 var TimezoneTracker = React.createClass({
   getInitialState: function() {
-    return {data: [{name: "Pat", location: "Ukraine"}, {name: "Larry", location: "Cambodia"}]}
+    return {data: [{name: "Pat", location: "Ukraine", offset: -7}, {name: "Larry", location: "Cambodia", offset: 3}]}
   },
   render: function () {
     return (
@@ -35,7 +35,7 @@ var TimezoneList = React.createClass({
     var timerInterval = setInterval(this.timer, 1000)
   },
   timer: function () {
-    d = new Date()
+    d = new Date().getTime()
     this.setState({date: d})
   },
   render: function () {
@@ -46,6 +46,7 @@ var TimezoneList = React.createClass({
           name={teammate.name}
           location={teammate.location}
           date={currentDate}
+          offset={teammate.offset}
           key={id}
         >
         </TimezoneTeamMember>
@@ -59,9 +60,9 @@ var TimezoneList = React.createClass({
 
 var TimezoneTeamMember = React.createClass({
   formateDateTime: function () {
-    var date = this.props.date
-    // TO DO - get hours, minutes, days, to make it pretty (Mon, July 21st - 10:21am)
-    var formattedDateTime = date.toString()
+    var adjustedDateTime = this.props.date + (this.props.offset * 1000 * 60 * 60)
+    var adjustedDate = new Date(adjustedDateTime)
+    var formattedDateTime = adjustedDate.toString()
     return formattedDateTime
   },
   render: function () {
