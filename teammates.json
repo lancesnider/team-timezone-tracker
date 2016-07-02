@@ -1,0 +1,17 @@
+[
+  {
+  	"name": "Pat", 
+  	"location": "Ukraine", 
+  	"offset": 3
+  }, 
+  {
+  	"name": "Larry", 
+  	"location": "Cambodia", 
+  	"offset": 7
+  },      
+  {
+  	"name": "Haley", 
+  	"location": "Utah", 
+  	"offset": -7
+  }
+]
