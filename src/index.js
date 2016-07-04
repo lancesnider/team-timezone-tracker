@@ -8,10 +8,16 @@ var TimezoneTracker = React.createClass({
       this.setState({data: result})
     }.bind(this))
   },
-  getInitialState: function () {
-    return {data: []}
+  timezoneAPI: function () {
+    this.serverRequest = $.get(this.props.apiUrl, function (result) {
+      this.setState({timezones: result})
+    }.bind(this))
   },
-  componentDidMount: function () {
+  getInitialState: function () {
+    return {data: [], timezones: []}
+  },
+  componentDidMount: function () {    
+    this.timezoneAPI()
     this.getTeammatesFromServer()
     //setInterval(this.getTeammatesFromServer, 2000)
   },
@@ -20,7 +26,7 @@ var TimezoneTracker = React.createClass({
       <div>
         <TimezoneTitle />
         <TimezoneList data={this.state.data} />
-        <TimezoneAddTeamMember />
+        <TimezoneAddTeamMember timezones={this.state.timezones} />
       </div>
     )
   }
@@ -113,13 +119,27 @@ var TimezoneAddTeamMember = React.createClass({
   handleLocationChange: function (e) {
     this.setState({location: e.target.value})
   },
+  populateDropdown: function () {
+    if (this.props.timezones.length == 0) return []
+    var locations = []
+    this.props.timezones["zones"].forEach(function(option, i){
+      locations.push(
+        <option key={i} value={option.gmtOffset}>{option.countryName}</option>
+      )
+    })
+    return (
+      locations
+    )
+  },
   render: function () {
     return (
       <div>
         <h2>Add team member</h2>
         <form>
           <input value={this.state.name} onChange={this.handleNameChange} type="text" placeholder="Teammate name" />
-          <input value={this.state.location} onChange={this.handleLocationChange} type="text" placeholder="Location" />
+          <select value="B" onChange={this.handleLocationChange}>
+            {this.populateDropdown()}
+          </select>
           <input type="submit" value="Add teamate" />
         </form>
       </div>
@@ -127,4 +147,4 @@ var TimezoneAddTeamMember = React.createClass({
   }
 })
 
-ReactDOM.render(<TimezoneTracker pollInterval={2000} />, document.getElementById('app'))
+ReactDOM.render(<TimezoneTracker apiUrl="http://api.timezonedb.com/v2/list-time-zone?key=PAJRXOS81UN4&format=json" pollInterval={2000} />, document.getElementById('app'))
