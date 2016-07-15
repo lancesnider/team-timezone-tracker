@@ -1,9 +1,19 @@
 var React = require('react');
 var ReactDOM = require('react-dom');
+var $ = require('jquery');
 
 var TimezoneTracker = React.createClass({
-  getInitialState: function() {
-    return {data: [{id: 0, name: "Pat", location: "Ukraine"}, {id: 1, name: "Larry", location: "Cambodia"}]}
+  getTeammatesFromServer: function () {
+    this.serverRequest = $.get("teammates.json", function (result) {
+      this.setState({data: result})
+    }.bind(this))
+  },
+  getInitialState: function () {
+    return {data: []}
+  },
+  componentDidMount: function () {
+    this.getTeammatesFromServer()
+    setInterval(this.getTeammatesFromServer, 2000)
   },
   render: function () {
     return (
@@ -75,7 +85,7 @@ var TimezoneAddTeamMember = React.createClass({
     this.setState({name: e.target.value});
   },
   handleLocationChange: function (e) {
-    this.setState({location: e.target.value});
+    this.setState({location: e.target.value})
   },
   render: function () {
     return (
@@ -91,4 +101,4 @@ var TimezoneAddTeamMember = React.createClass({
   }
 })
 
-ReactDOM.render(<TimezoneTracker />, document.getElementById('app'));
+ReactDOM.render(<TimezoneTracker pollInterval={2000} />, document.getElementById('app'))
