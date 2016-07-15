@@ -3,24 +3,22 @@ var ReactDOM = require('react-dom')
 var $ = require("jquery")
 
 var TimezoneTracker = React.createClass({
-  getTeammatesFromServer: function () {
-    this.serverRequest = $.get("teammates.json", function (result) {
-      this.setState({data: result})
+  getJson: function (jsonURL, key) {
+    this.serverRequest = $.get(jsonURL, function (result) {
+      returnObj = {}
+      returnObj[key] = result;
+      this.setState(returnObj)
     }.bind(this))
   },
-  timezoneAPI: function () {
-    this.serverRequest = $.get(this.props.apiUrl, function (result) {
-      this.setState({timezones: result})
-    }.bind(this))
-  },
+
   getInitialState: function () {
     return {data: [], timezones: []}
   },
   componentDidMount: function () {
-    this.timezoneAPI()
-    this.getTeammatesFromServer()
-    //setInterval(this.getTeammatesFromServer, 2000)
+    this.getJson(this.props.apiUrl, "timezones")
+    this.getJson("teammates.json", "data")
   },
+
   render: function () {
     return (
       <div>
